@@ -31,6 +31,13 @@ async function bootstrap() {
 }
 
 export default async function vercelHandler(req: any, res: any) {
+  const url = new URL(req.url ?? '/', 'http://localhost');
+
+  if (url.pathname === '/favicon.ico') {
+    res.setHeader('Content-Type', 'image/x-icon');
+    return res.status(204).end();
+  }
+
   try {
     const appHandler = handler ?? (await bootstrap());
     return appHandler(req, res);
