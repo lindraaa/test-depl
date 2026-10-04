@@ -30,7 +30,7 @@ async function bootstrap() {
   return handler;
 }
 
-export default async function vercelHandler(req: any, res: any) {
+module.exports = async function vercelHandler(req: any, res: any) {
   const url = new URL(req.url ?? '/', 'http://localhost');
 
   if (url.pathname === '/favicon.ico') {
@@ -53,4 +53,4 @@ export default async function vercelHandler(req: any, res: any) {
       error: message,
     });
   }
-}
+};

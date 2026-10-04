@@ -4,7 +4,6 @@
   "description": "Backend REST API for the Vet service",
   "author": "",
   "private": true,
-  "type": "module",
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
