@@ -4,7 +4,7 @@ import { AppModule } from '../src/app.module';
 import { AllExceptionsFilter } from '../src/common/filters/all-exceptions.filter';
 import { globalValidationPipe } from '../src/common/pipes/validation.pipe';
 
-let handler: ((req: any, res: any) => void) | undefined;
+let appInstance: any;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -26,14 +26,14 @@ async function bootstrap() {
 
   await app.init();
 
-  handler = app.getHttpAdapter().getInstance();
-  return handler;
+  appInstance = app.getHttpAdapter().getInstance();
+  return appInstance;
 }
 
-export default async function vercelHandler(req: any, res: any) {
+module.exports = async function handler(req: any, res: any) {
   try {
-    const appHandler = handler ?? (await bootstrap());
-    return appHandler(req, res);
+    const instance = appInstance ?? (await bootstrap());
+    return instance(req, res);
   } catch (error) {
     const message =
       error instanceof Error ? error.message : 'Unknown server startup error';
@@ -46,4 +46,4 @@ export default async function vercelHandler(req: any, res: any) {
       error: message,
     });
   }
-}
+};
