@@ -9,7 +9,7 @@ let handler: ((req: any, res: any) => void) | undefined;
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.enableCors({ origin: process.env.FRONTEND_URL });
+  app.enableCors({ origin: process.env.FRONTEND_URL ?? '*' });
   app.setGlobalPrefix('api/v1');
   app.useGlobalPipes(globalValidationPipe);
   app.useGlobalFilters(new AllExceptionsFilter());
@@ -31,6 +31,19 @@ async function bootstrap() {
 }
 
 export default async function vercelHandler(req: any, res: any) {
-  const appHandler = handler ?? (await bootstrap());
-  return appHandler(req, res);
+  try {
+    const appHandler = handler ?? (await bootstrap());
+    return appHandler(req, res);
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : 'Unknown server startup error';
+
+    console.error('Vercel bootstrap failed:', error);
+
+    return res.status(500).json({
+      status: 500,
+      message: 'Server startup failed',
+      error: message,
+    });
+  }
 }
