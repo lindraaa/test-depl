@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolvePackageJsonExports": true,
     "esModuleInterop": true,
     "isolatedModules": true,
     "declaration": true,
@@ -18,7 +19,6 @@
     "forceConsistentCasingInFileNames": true,
     "strict": false,
     "noUncheckedIndexedAccess": true,
-    "ignoreDeprecations": "6.0",
     "types": ["node"]
   },
   "include": ["src/**/*.ts"],
